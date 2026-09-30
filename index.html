@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDP Cookbook Pro Studio | Premium Edition</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Dynamic Print CSS Injected by JS -->
+    <style id="dynamicPrintStyle"></style>
+
+    <style>
+        /* Variabili dinamiche controllate da JS per la Gabbia */
+        :root {
+            --page-width-px: 816px;
+            --page-height-px: 1056px;
+            --safe-margin-px: 96px;
+            --font-scale: 1;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        .loader {
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top: 2px solid #eab308;
+            border-radius: 50%;
+            width: 18px; height: 18px;
+            animation: spin 1s linear infinite;
+            display: inline-block; vertical-align: middle;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Workspace & Toolbar */
+        #editorContainer {
+            display: flex; flex-direction: column; flex: 1; height: 100%;
+            background-color: #2c3338;
+        }
+
+        #toolbar {
+            background-color: #1e293b; border-bottom: 1px solid #0f172a;
+            padding: 8px 16px; display: flex; gap: 16px; align-items: center; justify-content: center; z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+        
+        .toolbar-group { display: flex; gap: 4px; border-right: 1px solid #334155; padding-right: 16px; }
+        .toolbar-group:last-child { border-right: none; }
+        .tool-btn {
+            background: #334155; color: #f8fafc; border: none; border-radius: 4px;
+            padding: 6px 10px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .tool-btn:hover { background: #475569; color: #fbbf24; }
+        .tool-btn svg { width: 16px; height: 16px; pointer-events: none; }
+
+        #editorWorkspace {
+            /* Sfondo scuro per far risaltare il foglio */
+            background-color: #323639; 
+            overflow-y: auto; display: flex; flex-direction: column; align-items: center;
+            padding: 4rem 2rem; flex: 1;
+        }
+        
+        /* --- WYSIWYG PAGINATION SYSTEM (PRINT FIDELITY) --- */
+        #bookPage {
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            /* Distacco visivo marcato tra una pagina e l'altra nell'anteprima */
+            gap: 3.5rem; 
+            outline: none;
+            counter-reset: pdf-page;
+        }
+
+        .page-text, .page-bleed {
+            background-color: white;
+            /* Ombra profonda e bordo per simulare fogli di carta separati fisicamente */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0,0,0,0.3);
+            border: 1px solid #e2e8f0;
+            
+            /* Utilizzo variabili reattive generate da JS per la dimensione fisica */
+            width: var(--page-width-px);
+            height: var(--page-height-px);
+            position: relative; overflow: hidden; color: #0f172a; box-sizing: border-box; flex-shrink: 0;
+            counter-increment: pdf-page;
+        }
+
+        /* KDP Safe Zone - Esattamente 1 pollice */
+        .page-text { padding: var(--safe-margin-px); display: flex; flex-direction: column; }
+        .page-bleed { padding: 0; display: flex; justify-content: center; align-items: center; border: none; }
+        .page-bleed img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- SISTEMA NUMERAZIONE PAGINE --- */
+        .page-text::after, .page-bleed::after {
+            content: counter(pdf-page);
+            position: absolute;
+            bottom: calc(var(--safe-margin-px) * 0.4);
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: 'Inter', sans-serif; 
+            font-size: calc(10pt * var(--font-scale)); 
+            font-weight: 500;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .page-text::after { color: #94a3b8; }
+        .page-bleed::after { 
+            color: #ffffff; 
+            text-shadow: 0px 1px 4px rgba(0,0,0,0.9), 0px 0px 2px rgba(0,0,0,1); 
+        }
+
+        .doc-title { font-family: 'Playfair Display', serif; font-size: calc(3.5rem * var(--font-scale)); text-align: center; color: #0f172a; line-height: 1.1; margin: 0; }
+        .doc-h1 { font-family: 'Playfair Display', serif; font-size: calc(2.8rem * var(--font-scale)); text-align: center; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-top: 0; margin-bottom: calc(1.2rem * var(--font-scale)); line-height: 1.2; }
+        .doc-h2 { font-family: 'Playfair Display', serif; font-size: calc(2rem * var(--font-scale)); color: #1e293b; margin-top: 0; margin-bottom: calc(1.2rem * var(--font-scale)); border-bottom: 2px solid #eab308; display: inline-block; padding-bottom: 5px; }
+        .doc-h3 { font-family: 'Playfair Display', serif; font-size: calc(1.6rem * var(--font-scale)); margin-bottom: 0.5rem; color: #0f172a; }
+        .doc-p { font-family: 'Inter', sans-serif; line-height: 1.6; margin-bottom: calc(1.2rem * var(--font-scale)); color: #334155; font-size: calc(11pt * var(--font-scale)); }
+        
+        .doc-ul { margin-left: 0; padding-left: 0; margin-bottom: calc(1.5rem * var(--font-scale)); font-family: 'Inter', sans-serif; font-size: calc(11pt * var(--font-scale)); line-height: 1.6; color: #334155; list-style-type: none; }
+        .doc-li { padding: calc(6px * var(--font-scale)) 0; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 8px; }
+        .doc-quote { font-family: 'Playfair Display', serif; font-size: calc(1.3rem * var(--font-scale)); font-style: italic; text-align: center; color: #64748b; margin: calc(1rem * var(--font-scale)) 0 calc(1.5rem * var(--font-scale)) 0; line-height: 1.5; }
+
+        /* Grid Informativa Adattiva */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: calc(0.8rem * var(--font-scale)); width: 100%; margin: calc(1rem * var(--font-scale)) 0; }
+        .info-card { display: flex; align-items: center; gap: calc(8px * var(--font-scale)); padding: calc(0.8rem * var(--font-scale)); background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .info-icon { flex-shrink: 0; display: flex; justify-content: center; align-items: center; width: calc(36px * var(--font-scale)); height: calc(36px * var(--font-scale)); background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
+        .info-icon svg { width: calc(20px * var(--font-scale)); height: calc(20px * var(--font-scale)); }
+        .info-text { display: flex; flex-direction: column; }
+        .info-label { font-size: calc(7pt * var(--font-scale)); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
+        .info-value { font-size: calc(10pt * var(--font-scale)); color: #0f172a; font-weight: 600; }
+        .macros-card { grid-column: 1 / -1; display: flex; align-items: center; gap: calc(1rem * var(--font-scale)); padding: calc(1rem * var(--font-scale)); background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; }
+
+        .steps-grid {
+            display: flex; flex-direction: column; justify-content: flex-start;
+            height: 100%; width: 100%; gap: calc(2rem * var(--font-scale));
+            padding-top: calc(1rem * var(--font-scale));
+        }
+        .step-row {
+            display: flex; align-items: flex-start; gap: calc(1.5rem * var(--font-scale));
+            page-break-inside: avoid; break-inside: avoid;
+        }
+        .step-img-small {
+            width: calc(160px * var(--font-scale));
+            height: calc(160px * var(--font-scale));
+            object-fit: cover; border-radius: 12px;
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        .step-content { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
+        .step-title {
+            font-family: 'Playfair Display', serif; font-size: calc(1.3rem * var(--font-scale));
+            color: #0f172a; margin-top: 0; margin-bottom: calc(0.5rem * var(--font-scale));
+        }
+        .step-desc {
+            font-family: 'Inter', sans-serif; font-size: calc(10.5pt * var(--font-scale));
+            line-height: 1.6; color: #334155; margin: 0;
+        }
+
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body, html { background: white !important; margin: 0 !important; padding: 0 !important; width: 100% !important; height: auto !important; overflow: visible !important; }
+            header, .w-\[360px\], #toolbar, #toast-container { display: none !important; }
+            
+            #editorContainer, #editorWorkspace { 
+                padding: 0 !important; margin: 0 !important; height: auto !important; 
+                overflow: visible !important; display: block !important; background: none !important; 
+            }
+            #bookPage { gap: 0 !important; display: block !important; }
+            
+            .page-text, .page-bleed { 
+                box-shadow: none !important; border: none !important; margin: 0 !important;
+                page-break-after: always !important; break-after: page !important; 
+                page-break-inside: avoid !important; break-inside: avoid !important;
+            }
+        }
+        
+        /* Toasts */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #1e293b; border-left: 4px solid #3b82f6; color: white; padding: 16px 24px; border-radius: 4px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); font-size: 14px; transform: translateX(120%); transition: transform 0.3s ease-out; display: flex; align-items: center; gap: 12px; }
+        .toast.show { transform: translateX(0); }
+        .toast.success { border-left-color: #10b981; }
+        .toast.warning { border-left-color: #eab308; }
+        .toast.error { border-left-color: #ef4444; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-slate-900 text-slate-200">
+
+    <header class="bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center z-20 shrink-0 shadow-sm">
+        <h1 class="text-xl font-bold font-serif flex items-center gap-3 text-gold-400">
+            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200">KDP Cookbook Pro</span>
+        </h1>
+        <div class="flex items-center gap-3">
+            <div id="headerTrimLabel" class="text-[11px] font-medium bg-slate-800 py-1.5 px-3 rounded text-slate-400 border border-slate-700 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 8.5" x 11" Bleed
+            </div>
+            
+            <button id="savePdfBtn" class="bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded flex items-center gap-2 transition-all shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Print PDF
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <div class="w-[360px] bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 z-10">
+            <div class="p-5 overflow-y-auto flex-1 custom-scrollbar">
+                
+                <div class="bg-slate-800/50 rounded-lg p-5 mb-6 border border-slate-700/50">
+                    <h3 class="text-slate-300 font-semibold mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                        Book Settings
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Book Topic & Niche</label>
+                        <textarea id="bookTopic" class="w-full h-16 p-3 bg-slate-900 border border-slate-700 rounded focus:ring-1 focus:ring-yellow-500 outline-none text-sm resize-none text-slate-200" placeholder="e.g. 'Authentic Italian Pasta'"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-blue-400 mb-1.5">Lingua del Libro</label>
+                        <select id="bookLanguage" class="w-full p-2.5 bg-slate-900 border border-blue-700/50 rounded outline-none text-sm text-blue-100 cursor-pointer focus:ring-1 focus:ring-blue-500 transition-all">
+                            <option value="Italian" selected>Italiano</option>
+                            <option value="English">English</option>
+                            <option value="Spanish">Español</option>
+                            <option value="French">Français</option>
+                            <option value="German">Deutsch</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-emerald-400 mb-1.5">Dimensioni Gabbia (Trim Size)</label>
+                        <select id="trimSize" class="w-full p-2.5 bg-slate-900 border border-emerald-700/50 rounded outline-none text-sm text-emerald-100 cursor-pointer focus:ring-1 focus:ring-emerald-500 transition-all">
+                            <option value="5x8">5 x 8 poll. (12,7 x 20,32 cm)</option>
+                            <option value="5.25x8">5,25 x 8 poll. (13,34 x 20,32 cm)</option>
+                            <option value="5.5x8.5">5,5 x 8,5 poll. (13,97 x 21,59 cm)</option>
+                            <option value="6x9">6 x 9 poll. (15,24 x 22,86 cm)</option>
+                            <option value="5.06x7.81">5,06 x 7,81 poll. (12,85 x 19,84 cm)</option>
+                            <option value="6.14x9.21">6,14 x 9,21 poll. (15,6 x 23,39 cm)</option>
+                            <option value="6.69x9.61">6,69 x 9,61 poll. (16,99 x 24,41 cm)</option>
+                            <option value="7x10">7 x 10 poll. (17,78 x 25,4 cm)</option>
+                            <option value="7.44x9.69">7,44 x 9,69 poll. (18,9 x 24,61 cm)</option>
+                            <option value="7.5x9.25">7,5 x 9,25 poll. (19,05 x 23,5 cm)</option>
+                            <option value="8x10">8 x 10 poll. (20,32 x 25,4 cm)</option>
+                            <option value="8.5x11" selected>8,5 x 11 poll. (21,59 x 27,94 cm)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Recipe Count</label>
+                        <input type="number" id="recipeCount" value="3" min="1" max="100" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded outline-none text-sm text-slate-200">
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Gemini API Keys</label>
+                        <textarea id="apiKey" class="w-full h-12 p-2.5 bg-slate-900 border border-slate-700 rounded outline-none text-xs text-slate-200 font-mono" placeholder="Multiple keys (1 per line)..."></textarea>
+                    </div>
+                </div>
+                
+                <button id="btnStartAutoPilot" class="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-slate-900 font-bold py-3.5 rounded shadow-lg transition-all flex justify-center items-center gap-2 mb-6 disabled:opacity-50">
+                    <span id="btnStartText" class="flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Generate Book</span>
+                    <span id="btnStartLoader" class="hidden"><div class="loader border-slate-900 border-top-slate-100"></div> Assembling...</span>
+                </button>
+
+                <div id="progressSection" class="hidden flex-col gap-4 bg-slate-900 p-4 rounded border border-slate-800 shadow-inner">
+                    <div class="flex justify-between text-xs mb-1 text-slate-400">
+                        <span id="progressStatus" class="truncate max-w-[200px] font-medium text-yellow-500">Initializing...</span>
+                        <span id="progressCount" class="font-mono">0/0</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-1.5">
+                        <div id="progressBar" class="bg-yellow-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="editorContainer">
+            
+            <!-- WYSIWYG Toolbar -->
+            <div id="toolbar">
+                <div class="toolbar-group">
+                    <button class="tool-btn" title="Decrease Font Size" onclick="adjustFontSize(-1)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    </button>
+                    <button class="tool-btn" title="Increase Font Size" onclick="adjustFontSize(1)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </button>
+                </div>
+                <div class="toolbar-group">
+                    <button class="tool-btn" title="Bold" onclick="document.execCommand('bold', false, null)"><span class="font-bold text-sm">B</span></button>
+                    <button class="tool-btn" title="Italic" onclick="document.execCommand('italic', false, null)"><span class="italic text-sm font-serif">I</span></button>
+                </div>
+                <div class="toolbar-group">
+                    <button class="tool-btn" title="Align Left" onclick="document.execCommand('justifyLeft', false, null)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"></path></svg></button>
+                    <button class="tool-btn" title="Align Center" onclick="document.execCommand('justifyCenter', false, null)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M4 18h16"></path></svg></button>
+                    <button class="tool-btn" title="Align Right" onclick="document.execCommand('justifyRight', false, null)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 12h10M4 18h16"></path></svg></button>
+                    <button class="tool-btn" title="Justify" onclick="document.execCommand('justifyFull', false, null)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                </div>
+                <div class="text-xs text-slate-400 font-medium ml-4">Select text on page to adjust manually</div>
+            </div>
+
+            <!-- Workspace che fa da visualizzatore PDF -->
+            <div id="editorWorkspace">
+                <div id="bookPage" contenteditable="true" spellcheck="false">
+                    <div class="page-text" style="justify-content: center; align-items: center;" id="welcomePlaceholder">
+                        <h1 class="doc-title" style="color: #94a3b8; font-size: 3rem;">PDF Viewer<br>Layout</h1>
+                        <p class="doc-p" style="color: #64748b; font-size: 1.1rem; max-width: 500px; margin: 30px auto; text-align: center;">
+                            Anteprima esatta di stampa per KDP: <br><br>
+                            📄 Fogli fisicamente separati con distacco netto<br>
+                            🔢 Numerazione pagine automatica ovunque<br>
+                            📐 Margini sicuri 1 pollice (KDP Premium)<br>
+                            🖨 Motore Anti-Crash per libri fino a 200 pagine!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        // --- LAYOUT ENGINE: Calcola dimensioni e inietta CSS in base alla Gabbia ---
+        function applyLayoutEngine() {
+            const select = document.getElementById('trimSize');
+            const val = select.value;
+            const [wStr, hStr] = val.split('x');
+            const widthIn = parseFloat(wStr);
+            const heightIn = parseFloat(hStr);
+
+            // Calcolo Margini (FISSO A 1 POLLICE PER KDP) & Font Scale per armonizzare il contenuto
+            let marginIn = 1.0; 
+            let fontScale = 1.0;
+            
+            if (widthIn <= 5.5) { fontScale = 0.75; }
+            else if (widthIn <= 6.69) { fontScale = 0.85; }
+            else if (widthIn <= 7.5) { fontScale = 0.95; }
+
+            // 1 inch = 96px for screen rendering
+            const wPx = widthIn * 96;
+            const hPx = heightIn * 96;
+            const mPx = marginIn * 96;
+
+            // Aggiorna variabili CSS globali (A schermo)
+            document.documentElement.style.setProperty('--page-width-px', `${wPx}px`);
+            document.documentElement.style.setProperty('--page-height-px', `${hPx}px`);
+            document.documentElement.style.setProperty('--safe-margin-px', `${mPx}px`);
+            document.documentElement.style.setProperty('--font-scale', fontScale);
+
+            // Inietta regola CSS Esatta per forzare il visualizzatore PDF del browser (Es. Chrome/Edge)
+            const printStyle = document.getElementById('dynamicPrintStyle');
+            printStyle.innerHTML = `
+                @media print {
+                    @page { 
+                        size: ${widthIn}in ${heightIn}in; 
+                        margin: 0 !important; 
+                    }
+                    .page-text, .page-bleed { 
+                        width: ${widthIn}in !important; 
+                        height: ${heightIn}in !important; 
+                        overflow: hidden !important; 
+                    }
+                }
+            `;
+
+            document.getElementById('headerTrimLabel').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ${widthIn}" x ${heightIn}" Bleed`;
+        }
+
+        function adjustFontSize(delta) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) return;
+            let node = selection.focusNode;
+            if (node.nodeType === 3) node = node.parentElement;
+            
+            if (node.id === 'bookPage' || node.classList.contains('page-text')) {
+                document.execCommand('fontSize', false, '7'); 
+                const spans = document.getElementsByTagName("font");
+                for(let span of spans) {
+                    if(span.size === "7") { span.removeAttribute("size"); span.style.fontSize = "16pt"; }
+                }
+                return;
+            }
+            const currentStyle = window.getComputedStyle(node);
+            let currentSize = parseFloat(currentStyle.fontSize);
+            node.style.fontSize = (currentSize + delta) + 'px';
+        }
+
+        function compressImageBase64(base64Str, maxWidth, maxHeight, quality = 0.7) {
+            return new Promise((resolve) => {
+                let img = new Image();
+                img.onload = () => {
+                    let canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+                    if (height > maxHeight) {
+                        width = Math.round((width * maxHeight) / height);
+                        height = maxHeight;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Ritorna un JPEG super compresso per svuotare la RAM del browser
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.onerror = () => resolve(base64Str); // In caso di errore strano, tieni l'originale
+                img.src = base64Str;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            applyLayoutEngine();
+            document.getElementById('trimSize').addEventListener('change', applyLayoutEngine);
+
+            const DOM = {
+                btnStart: document.getElementById('btnStartAutoPilot'),
+                btnText: document.getElementById('btnStartText'),
+                btnLoader: document.getElementById('btnStartLoader'),
+                topicInput: document.getElementById('bookTopic'),
+                languageInput: document.getElementById('bookLanguage'),
+                countInput: document.getElementById('recipeCount'),
+                apiKeyInput: document.getElementById('apiKey'),
+                bookPage: document.getElementById('bookPage'),
+                savePdfBtn: document.getElementById('savePdfBtn'),
+                progressSection: document.getElementById('progressSection'),
+                progressStatus: document.getElementById('progressStatus'),
+                progressCount: document.getElementById('progressCount'),
+                progressBar: document.getElementById('progressBar'),
+                toastContainer: document.getElementById('toast-container')
+            };
+
+            let apiKeys = [];
+            let currentKeyIndex = 0;
+
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                let icon = type === 'success' ? '<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : 
+                           type === 'warning' ? '<svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>' :
+                           type === 'error' ? '<svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>' : 
+                           '<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+
+                toast.innerHTML = `${icon} <span>${message}</span>`;
+                DOM.toastContainer.appendChild(toast);
+                setTimeout(() => toast.classList.add('show'), 10);
+                setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 5000);
+            }
+
+            function updateStatus(msg, percent = null, current = null, total = null) {
+                DOM.progressStatus.textContent = msg;
+                if(percent !== null) DOM.progressBar.style.width = `${percent}%`;
+                if(current !== null && total !== null) DOM.progressCount.textContent = `${current}/${total}`;
+            }
+
+            function getNextApiKey() {
+                if (apiKeys.length === 0) return ""; 
+                const key = apiKeys[currentKeyIndex];
+                currentKeyIndex = (currentKeyIndex + 1) % apiKeys.length;
+                return key;
+            }
+
+            const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            const fetchWithRetry = async (urlGenerator, optionsGenerator, maxRetries = 4) => {
+                let retries = 0;
+                while (retries < maxRetries) {
+                    try {
+                        const response = await fetch(urlGenerator(), optionsGenerator());
+                        if (!response.ok) {
+                            const errData = await response.json().catch(()=>({}));
+                            if (response.status === 429) throw new Error("Rate limit exceeded");
+                            throw new Error(`HTTP ${response.status}: ${errData.error?.message || 'Unknown Error'}`);
+                        }
+                        return response;
+                    } catch (error) {
+                        retries++;
+                        if (retries >= maxRetries) throw error;
+                        updateStatus(`API Limit. Retrying in 8s...`);
+                        await delay(8000);
+                    }
+                }
+            };
+
+            async function callGemini(prompt, systemInstruction) {
+                const urlGenerator = () => `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${getNextApiKey()}`;
+                const optionsGenerator = () => ({
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.7, responseMimeType: "application/json" },
+                        systemInstruction: { parts: [{ text: systemInstruction }] }
+                    })
+                });
+
+                const response = await fetchWithRetry(urlGenerator, optionsGenerator);
+                const data = await response.json();
+                return JSON.parse(data.candidates[0].content.parts[0].text);
+            }
+
+            async function callGeminiImage(prompt) {
+                const select = document.getElementById('trimSize');
+                const [wStr, hStr] = select.value.split('x');
+                const w = parseFloat(wStr); const h = parseFloat(hStr);
+                const aspect = w > h ? '16:9' : (w === h ? '1:1' : (h/w > 1.4 ? '9:16' : '3:4')); 
+
+                const urlGenerator = () => `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${getNextApiKey()}`;
+                const optionsGenerator = () => ({
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: `${prompt}. Premium bestselling cookbook photography, 8k, highly detailed. CRITICAL: NO TEXT OR LETTERS IN IMAGE.` }] }], 
+                        generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: aspect } }
+                    })
+                });
+
+                try {
+                    const response = await fetchWithRetry(urlGenerator, optionsGenerator);
+                    const data = await response.json();
+                    const part = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                    if (part) {
+                        const rawBase64 = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+                        // Comprimi massicciamente per il DOM (Evita Crash su libri enormi)
+                        return await compressImageBase64(rawBase64, 1200, 1600, 0.75); 
+                    }
+                } catch(e) { console.warn("Image generation failed:", e); }
+                return null;
+            }
+
+            async function callGeminiImageSquare(prompt) {
+                const urlGenerator = () => `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${getNextApiKey()}`;
+                const optionsGenerator = () => ({
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: `${prompt}. Close-up professional step-by-step cooking action photo, 8k. CRITICAL: NO TEXT IN IMAGE.` }] }], 
+                        generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: '1:1' } }
+                    })
+                });
+
+                try {
+                    const response = await fetchWithRetry(urlGenerator, optionsGenerator);
+                    const data = await response.json();
+                    const part = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                    if (part) {
+                        const rawBase64 = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+                        // Immagini step molto piccole, comprimo severamente
+                        return await compressImageBase64(rawBase64, 500, 500, 0.7);
+                    }
+                } catch(e) { console.warn("Square Image generation failed:", e); }
+                return null;
+            }
+
+            DOM.savePdfBtn.addEventListener('click', () => {
+                if(DOM.bookPage.querySelector('#welcomePlaceholder')) {
+                    return showToast("Devi prima generare un libro per poterlo stampare.", "warning");
+                }
+                
+                showToast("⏳ Preparazione del file PDF ad alta risoluzione. Il browser sta elaborando le pagine, non toccare nulla...", "info");
+                
+                // Un tempo generoso (4000ms) dà al browser il modo di smaltire la coda di rendering DOM
+                // prima di richiamare il pesante spooler di stampa PDF
+                setTimeout(() => {
+                    window.print();
+                    showToast("✅ Ricorda: 'Salva come PDF', e togli i Margini predefiniti.", "success");
+                }, 4000);
+            });
+
+            DOM.btnStart.addEventListener('click', async () => {
+                const topic = DOM.topicInput.value.trim();
+                const language = DOM.languageInput.value;
+                const numRecipes = parseInt(DOM.countInput.value);
+                apiKeys = DOM.apiKeyInput.value.split('\n').map(k => k.trim()).filter(k => k !== '');
+                currentKeyIndex = 0; 
+                
+                if(!topic) return showToast("Provide a Book Topic.", "warning");
+
+                // Lock UI
+                DOM.btnStart.disabled = true;
+                DOM.btnText.classList.add('hidden');
+                DOM.btnLoader.classList.remove('hidden');
+                DOM.progressSection.classList.remove('hidden');
+                DOM.bookPage.innerHTML = ''; 
+                
+                applyLayoutEngine();
+                const trimLabel = document.getElementById('trimSize').options[document.getElementById('trimSize').selectedIndex].text;
+
+                const i18n = {
+                    "English": { prep: "Prep Time", cook: "Cook Time", diff: "Difficulty", serv: "Servings", nut: "Nutrition", ingr: "Ingredients", step: "Step", toc: "Table of Contents" },
+                    "Italian": { prep: "Preparazione", cook: "Cottura", diff: "Difficoltà", serv: "Porzioni", nut: "Nutrizione", ingr: "Ingredienti", step: "Passo", toc: "Indice" },
+                    "Spanish": { prep: "Preparación", cook: "Cocción", diff: "Dificultad", serv: "Porciones", nut: "Nutrición", ingr: "Ingredientes", step: "Paso", toc: "Índice" },
+                    "French": { prep: "Préparation", cook: "Cuisson", diff: "Difficulté", serv: "Portions", nut: "Nutrition", ingr: "Ingrédients", step: "Étape", toc: "Table des matières" },
+                    "German": { prep: "Vorbereitung", cook: "Kochzeit", diff: "Schwierigkeit", serv: "Portionen", nut: "Nährwerte", ingr: "Zutaten", step: "Schritt", toc: "Inhaltsverzeichnis" }
+                };
+                const labels = i18n[language] || i18n["English"];
+
+                let tocEntries = []; 
+                let currentPhysicalPage = 1; 
+
+                try {
+                    updateStatus(`Ideating ${numRecipes} premium recipes...`, 5);
+                    const tocSystem = `You are a Michelin-star chef. Return ONLY a JSON array of strings containing highly sophisticated recipe titles in ${language.toUpperCase()}.`;
+                    const tocPrompt = `Generate exactly ${numRecipes} unique recipe names for a premium cookbook themed: "${topic}". Return JSON array. Language: ${language}`;
+                    
+                    const tocData = await callGemini(tocPrompt, tocSystem);
+
+                    // --- TITLE PAGE ---
+                    DOM.bookPage.insertAdjacentHTML('beforeend', `
+                        <div class="page-text" style="justify-content: center; align-items: center;">
+                            <h1 class="doc-title">${topic}</h1>
+                            <h2 class="doc-h2" style="border: none; color: #64748b; margin-top: 2rem; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; font-size: calc(1rem * var(--font-scale));">${trimLabel} <br> Premium Color Edition</h2>
+                        </div>
+                    `);
+
+                    // --- GENERATE RECIPES ---
+                    for(let i = 0; i < tocData.length; i++) {
+                        const recipeName = tocData[i];
+                        updateStatus(`Drafting: ${recipeName}...`, ((i)/tocData.length)*100, i+1, tocData.length);
+                        
+                        try {
+                            const recipeSystem = `You are a professional culinary writer. Output strictly valid JSON.
+CRITICAL: Keep the JSON keys exactly as shown below in English, but write ALL the string values and text content in ${language.toUpperCase()}.
+Schema:
+{
+    "description": "Evocative description (2 sentences).",
+    "prepTime": "15m", "cookTime": "45m", "difficulty": "Medium", "servings": "4",
+    "calories": "450 kcal", "macros": "Pro: 25g | Carbs: 45g | Fat: 18g",
+    "ingredients": ["100g item", "..."],
+    "steps": [ { "title": "Step", "instruction": "Detail.", "imagePrompt": "Action image prompt. No text." } ],
+    "visualPromptFinished": "Prompt for plated dish. No text. ALWAYS IN ENGLISH for AI generator.",
+    "visualPromptIngredients": "Prompt for raw ingredients knolling. No text. ALWAYS IN ENGLISH for AI generator."
+}`;
+                            // Esattamente 6 passaggi per riempire perfettamente 2 pagine (3 a 3)
+                            const recipePrompt = `Write data for "${recipeName}" belonging to "${topic}". Provide EXACTLY 6 steps. Make sure all narrative content is in ${language}.`;
+                            const recipeData = await callGemini(recipePrompt, recipeSystem);
+
+                            // Page 1: Bleed Photo
+                            currentPhysicalPage++; 
+                            updateStatus(`Shooting finished dish for ${recipeName}...`, null, i+1, tocData.length);
+                            const imgFinished = await callGeminiImage(recipeData.visualPromptFinished);
+                            DOM.bookPage.insertAdjacentHTML('beforeend', `
+                                <div class="page-bleed"><img src="${imgFinished || 'https://placehold.co/800x1200/1e293b/ffffff?text=Image+Failed'}" alt="Dish" /></div>
+                            `);
+                            await delay(8000);
+
+                            // Page 2: Title & Info (TOC Page!)
+                            currentPhysicalPage++;
+                            tocEntries.push({ title: recipeName, pageNum: currentPhysicalPage }); 
+                            
+                            DOM.bookPage.insertAdjacentHTML('beforeend', `
+                                <div class="page-text" style="justify-content: center;">
+                                    <h1 class="doc-h1">${recipeName}</h1>
+                                    <p class="doc-quote">"${recipeData.description}"</p>
+                                    <div class="info-grid">
+                                        <div class="info-card">
+                                            <div class="info-icon"><svg class="text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                                            <div class="info-text"><span class="info-label">${labels.prep}</span><span class="info-value">${recipeData.prepTime}</span></div>
+                                        </div>
+                                        <div class="info-card">
+                                            <div class="info-icon"><svg class="text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg></div>
+                                            <div class="info-text"><span class="info-label">${labels.cook}</span><span class="info-value">${recipeData.cookTime}</span></div>
+                                        </div>
+                                        <div class="info-card">
+                                            <div class="info-icon"><svg class="text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg></div>
+                                            <div class="info-text"><span class="info-label">${labels.diff}</span><span class="info-value">${recipeData.difficulty}</span></div>
+                                        </div>
+                                        <div class="info-card">
+                                            <div class="info-icon"><svg class="text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+                                            <div class="info-text"><span class="info-label">${labels.serv}</span><span class="info-value">${recipeData.servings}</span></div>
+                                        </div>
+                                        <div class="macros-card">
+                                            <div class="info-icon"><svg class="text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg></div>
+                                            <div class="info-text">
+                                                <span class="info-label">${labels.nut}</span>
+                                                <span class="info-value" style="font-size: calc(9pt * var(--font-scale)); margin-top: 4px;"><strong>${recipeData.calories}</strong> &bull; ${recipeData.macros}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+
+                            // Page 3: Ingredients Bleed
+                            currentPhysicalPage++;
+                            updateStatus(`Styling ingredients for ${recipeName}...`, null, i+1, tocData.length);
+                            const imgIngredients = await callGeminiImage(recipeData.visualPromptIngredients);
+                            DOM.bookPage.insertAdjacentHTML('beforeend', `
+                                <div class="page-bleed"><img src="${imgIngredients || 'https://placehold.co/800x1200/1e293b/ffffff?text=Image+Failed'}" alt="Ingredients" /></div>
+                            `);
+                            await delay(8000);
+
+                            // Page 4: Ingredients List
+                            currentPhysicalPage++;
+                            let ulList = recipeData.ingredients.map(ing => `<li class="doc-li"><svg class="w-4 h-4 text-yellow-500 shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span>${ing}</span></li>`).join('');
+                            DOM.bookPage.insertAdjacentHTML('beforeend', `
+                                <div class="page-text" style="justify-content: center;">
+                                    <h2 class="doc-h2">${labels.ingr}</h2>
+                                    <ul class="doc-ul">${ulList}</ul>
+                                </div>
+                            `);
+
+                            // Pages 5+: Steps (3 per pagina, immagini quadrate piccole)
+                            const totalSteps = recipeData.steps.length;
+                            const stepsPerPage = 3;
+                            const totalStepPages = Math.ceil(totalSteps / stepsPerPage);
+
+                            for(let p = 0; p < totalStepPages; p++) {
+                                currentPhysicalPage++;
+                                
+                                let stepsHtml = '';
+                                const startIdx = p * stepsPerPage;
+                                const endIdx = Math.min(startIdx + stepsPerPage, totalSteps);
+
+                                for(let s = startIdx; s < endIdx; s++) {
+                                    updateStatus(`Illustrating Step ${s+1} of ${recipeName}...`, null, i+1, tocData.length);
+                                    const step = recipeData.steps[s];
+                                    
+                                    const imgStep = await callGeminiImageSquare(step.imagePrompt);
+                                    
+                                    stepsHtml += `
+                                        <div class="step-row">
+                                            <img src="${imgStep || 'https://placehold.co/300x300/1e293b/ffffff?text=Step+'+(s+1)}" class="step-img-small" alt="${labels.step} ${s+1}" />
+                                            <div class="step-content">
+                                                <h3 class="step-title">${labels.step} ${s+1}: ${step.title}</h3>
+                                                <p class="step-desc">${step.instruction}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                    
+                                    // Pausa per API
+                                    if (s < endIdx - 1 || p < totalStepPages - 1) await delay(8000); 
+                                }
+
+                                DOM.bookPage.insertAdjacentHTML('beforeend', `
+                                    <div class="page-text">
+                                        <h2 class="doc-h2" style="align-self: flex-start; margin-bottom: 0;">${labels.step} ${startIdx + 1}-${endIdx}</h2>
+                                        <div class="steps-grid">
+                                            ${stepsHtml}
+                                        </div>
+                                    </div>
+                                `);
+                            }
+                        } catch(err) {
+                            showToast(`Failed: ${recipeName}`, "error");
+                        }
+                    }
+
+                    // --- FINAL STEP: TOC PAGE ---
+                    updateStatus("Formatting Table of Contents...", 98);
+                    
+                    let tocHTML = `
+                        <div class="page-text">
+                            <h1 class="doc-h1">${labels.toc}</h1>
+                            <ul class="doc-ul" style="margin-top: calc(2rem * var(--font-scale));">
+                    `;
+                    
+                    tocEntries.forEach(entry => {
+                        tocHTML += `
+                            <li style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px dotted #cbd5e1; padding: calc(12px * var(--font-scale)) 0; margin-bottom: calc(1rem * var(--font-scale));">
+                                <span style="font-family: 'Playfair Display', serif; font-size: calc(12pt * var(--font-scale)); background: white; padding-right: 15px; margin-bottom: -4px;">${entry.title}</span>
+                                <span style="font-family: 'Inter', sans-serif; font-size: calc(12pt * var(--font-scale)); color: #64748b; background: white; padding-left: 15px; margin-bottom: -4px; font-weight: 600;">${entry.pageNum}</span>
+                            </li>`;
+                    });
+                    
+                    tocHTML += `</ul></div>`;
+                    DOM.bookPage.insertAdjacentHTML('beforeend', tocHTML);
+                    
+                    updateStatus("Book Generation Complete!", 100, tocData.length, tocData.length);
+                    showToast("Book Ready! Memory Optimized for PDF Printing.", "success");
+
+                } catch(e) {
+                    showToast(`Error: ${e.message}`, "error");
+                } finally {
+                    DOM.btnStart.disabled = false;
+                    DOM.btnText.classList.remove('hidden');
+                    DOM.btnLoader.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
