@@ -11,7 +11,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Dynamic Print CSS Injected by JS -->
     <style id="dynamicPrintStyle">@media print { @page { size: 8.5in 11in; margin: 0 !important; } .page-text, .page-bleed { width: 8.5in !important; height: 11in !important; overflow: hidden !important; } }</style>
 
     <style>
@@ -95,74 +94,50 @@
 
         /* Typography */
         .doc-title { font-family: 'Playfair Display', serif; font-size: calc(3.5rem * var(--font-scale)); text-align: center; color: #0f172a; line-height: 1.1; margin: 0; outline: none; }
-        .doc-h1 { font-family: 'Playfair Display', serif; font-size: calc(2.4rem * var(--font-scale)); text-align: center; color: #0f172a; margin-top: 0; margin-bottom: calc(1.5rem * var(--font-scale)); line-height: 1.1; }
+        .doc-h1 { font-family: 'Playfair Display', serif; font-size: calc(2.2rem * var(--font-scale)); text-align: center; color: #0f172a; margin: 0 0 calc(1.5rem * var(--font-scale)) 0; line-height: 1.2; }
         .doc-h2 { font-family: 'Playfair Display', serif; font-size: calc(2rem * var(--font-scale)); color: #0f172a; margin-top: 0; margin-bottom: calc(1.2rem * var(--font-scale)); border-bottom: 3px solid #eab308; display: inline-block; padding-bottom: 4px; font-weight: 800; }
-        .doc-quote { font-family: 'Playfair Display', serif; font-size: calc(1.25rem * var(--font-scale)); font-style: italic; text-align: center; color: #475569; margin: 0 0 calc(2rem * var(--font-scale)) 0; line-height: 1.6; padding: 0 1rem; }
+        .doc-quote { font-family: 'Playfair Display', serif; font-size: calc(1.25rem * var(--font-scale)); font-style: italic; text-align: center; color: #475569; margin: 0 0 calc(1rem * var(--font-scale)) 0; line-height: 1.5; padding: 0 1rem; }
         
         .unit-alt { color: #64748b; font-size: 0.85em; font-weight: 500; white-space: nowrap; margin-left: 4px; }
 
         /* ---------------------------------------------------------
-           INFO GRID & MACROS
+           NEW PROFESSIONAL NUTRITION & META BAR
         --------------------------------------------------------- */
-        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(0.6rem * var(--font-scale)); width: 100%; margin: calc(1rem * var(--font-scale)) 0; }
-        .info-card { display: flex; align-items: center; gap: calc(8px * var(--font-scale)); padding: calc(0.8rem * var(--font-scale)); background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .info-icon { flex-shrink: 0; display: flex; justify-content: center; align-items: center; width: calc(34px * var(--font-scale)); height: calc(34px * var(--font-scale)); background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
-        .info-icon svg { width: calc(18px * var(--font-scale)); height: calc(18px * var(--font-scale)); }
-        .info-text { display: flex; flex-direction: column; }
-        .info-label { font-size: calc(7.5pt * var(--font-scale)); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
-        .info-value { font-size: calc(10pt * var(--font-scale)); color: #0f172a; font-weight: 700; }
-        
-        .macros-card { grid-column: 1 / -1; display: flex; align-items: center; gap: calc(1rem * var(--font-scale)); padding: calc(0.85rem * var(--font-scale)); background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; }
-        .nut-val { font-size: calc(9.5pt * var(--font-scale)); line-height: 1.5; margin-top: 2px; }
+        .recipe-meta-bar { display: flex; justify-content: center; gap: calc(3rem * var(--font-scale)); margin: calc(1.5rem * var(--font-scale)) 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: calc(1rem * var(--font-scale)) 0; flex-shrink: 0; }
+        .meta-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .meta-val { font-family: 'Playfair Display', serif; font-size: calc(15pt * var(--font-scale)); color: #0f172a; font-weight: 700; line-height: 1; }
+        .meta-lbl { font-family: 'Inter', sans-serif; font-size: calc(8pt * var(--font-scale)); text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: 600; }
+
+        .nutrition-panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: calc(1.5rem * var(--font-scale)); width: 100%; max-width: 480px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .nut-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px; }
+        .nut-title { font-family: 'Playfair Display', serif; font-size: calc(13pt * var(--font-scale)); font-weight: 800; color: #0f172a; margin: 0; }
+        .nut-subtitle { font-family: 'Inter', sans-serif; font-size: calc(9pt * var(--font-scale)); color: #64748b; font-weight: 500; }
+        .nut-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2rem; row-gap: 8px; }
+        .nut-row { display: flex; justify-content: space-between; font-family: 'Inter', sans-serif; font-size: calc(10pt * var(--font-scale)); border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; }
+        .nut-lbl { color: #475569; font-weight: 500; }
+        .nut-val-txt { color: #0f172a; font-weight: 700; }
 
         /* ---------------------------------------------------------
            INGREDIENTS (Strictly 2 Columns Magazine Layout)
         --------------------------------------------------------- */
-        .ingredients-container { width: 100%; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .ingredients-grid-2col {
-            column-count: 2; column-gap: calc(2.5rem * var(--font-scale)); width: 100%; margin-top: calc(1rem * var(--font-scale));
-        }
-        .ingr-item {
-            display: flex; align-items: flex-start; gap: 12px; padding: calc(12px * var(--font-scale)) 0;
-            border-bottom: 1px solid #f1f5f9; break-inside: avoid; page-break-inside: avoid;
-        }
+        .ingredients-container { width: 100%; display: flex; flex-direction: column; overflow: hidden; padding-bottom: 2rem; }
+        .ingredients-grid-2col { column-count: 2; column-gap: calc(2.5rem * var(--font-scale)); width: 100%; margin-top: calc(1rem * var(--font-scale)); }
+        .ingr-item { display: flex; align-items: flex-start; gap: 12px; padding: calc(12px * var(--font-scale)) 0; border-bottom: 1px solid #f1f5f9; break-inside: avoid; page-break-inside: avoid; }
         .ingr-check { width: calc(18px * var(--font-scale)); height: calc(18px * var(--font-scale)); color: #10b981; flex-shrink: 0; margin-top: 2px; }
-        .ingr-text {
-            font-family: 'Inter', sans-serif; font-size: calc(11.5pt * var(--font-scale));
-            font-weight: 500; color: #1e293b; line-height: 1.4; flex: 1; min-width: 0; word-break: break-word;
-        }
+        .ingr-text { font-family: 'Inter', sans-serif; font-size: calc(11.5pt * var(--font-scale)); font-weight: 500; color: #1e293b; line-height: 1.4; flex: 1; min-width: 0; word-break: break-word; }
 
         /* ---------------------------------------------------------
            STEPS (DK/Phaidon Professional Layout)
         --------------------------------------------------------- */
         .steps-page-wrapper { display: flex; flex-direction: column; height: 100%; width: 100%; }
         .steps-header-box { flex-shrink: 0; margin-bottom: calc(1.5rem * var(--font-scale)); }
-        .steps-grid {
-            display: flex; flex-direction: column; flex: 1; width: 100%;
-            justify-content: space-between; gap: calc(1.5rem * var(--font-scale));
-        }
-        .step-row {
-            display: flex; flex-direction: row; align-items: center; gap: calc(1.5rem * var(--font-scale));
-            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
-            padding: calc(1.2rem * var(--font-scale)); box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
-            flex: 1; min-height: 0; box-sizing: border-box; overflow: hidden;
-        }
-        .step-img-box {
-            width: calc(175px * var(--font-scale)); height: calc(175px * var(--font-scale));
-            flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; aspect-ratio: 1/1;
-        }
+        .steps-grid { display: flex; flex-direction: column; flex: 1; width: 100%; justify-content: space-between; gap: calc(1.5rem * var(--font-scale)); }
+        .step-row { display: flex; flex-direction: row; align-items: center; gap: calc(1.5rem * var(--font-scale)); background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: calc(1.2rem * var(--font-scale)); box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03); box-sizing: border-box; overflow: hidden; flex: 1; }
+        .step-img-box { width: calc(175px * var(--font-scale)); height: calc(175px * var(--font-scale)); flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; aspect-ratio: 1/1; }
         .step-img-small { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .step-content {
-            flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;
-        }
-        .step-title {
-            font-family: 'Playfair Display', serif; font-size: calc(1.3rem * var(--font-scale));
-            color: #0f172a; margin: 0 0 calc(0.45rem * var(--font-scale)) 0; font-weight: 800; line-height: 1.2;
-        }
-        .step-desc {
-            font-family: 'Inter', sans-serif; font-size: calc(11pt * var(--font-scale));
-            line-height: 1.6; color: #334155; margin: 0; font-weight: 400; word-break: break-word;
-        }
+        .step-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+        .step-title { font-family: 'Playfair Display', serif; font-size: calc(1.3rem * var(--font-scale)); color: #0f172a; margin: 0 0 calc(0.45rem * var(--font-scale)) 0; font-weight: 800; line-height: 1.2; }
+        .step-desc { font-family: 'Inter', sans-serif; font-size: calc(11pt * var(--font-scale)); line-height: 1.6; color: #334155; margin: 0; font-weight: 400; word-break: break-word; }
 
         /* ---------------------------------------------------------
            TOC Dynamic Columns
@@ -175,25 +150,9 @@
         .toc-leader { flex-grow: 1; border-bottom: 2px dotted #cbd5e1; position: relative; top: -4px; margin: 0 4px; }
         .toc-page { font-family: 'Inter', sans-serif; font-size: calc(12pt * var(--font-scale)); color: #64748b; background: white; padding-left: 8px; font-weight: 700; }
 
-        /* ---------------------------------------------------------
-           A+ CONTENT STUDIO (Flat 2-Page Spread)
-        --------------------------------------------------------- */
-        .aplus-container { display: flex; flex-direction: column; gap: 24px; align-items: center; width: 100%; }
-        .aplus-banner { 
-            width: 970px; height: 300px; background: white; position: relative; overflow: hidden; 
-            display: flex; box-sizing: border-box; flex-shrink: 0; border: 1px solid #e2e8f0;
-        }
-        .editable-text { outline: none; padding: 2px; border-radius: 4px; transition: 0.2s; }
-        .editable-text:hover, .editable-text:focus { background: rgba(0,0,0,0.05); box-shadow: 0 0 0 1px rgba(0,0,0,0.1); }
-        .aplus-banner[style*="#0f172a"] .editable-text:hover, .aplus-banner[style*="#0f172a"] .editable-text:focus { background: rgba(255,255,255,0.1); box-shadow: 0 0 0 1px rgba(255,255,255,0.3); }
-
         /* General Modals & Overlays */
         .editable-image-container { position: relative; width: 100%; height: 100%; cursor: pointer; border-radius: inherit; }
-        .editable-image-container::after { 
-            content: '✎ Rigenera Immagine'; position: absolute; inset: 0; background: rgba(0,0,0,0.6); 
-            color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; 
-            font-size: 1.1rem; opacity: 0; transition: opacity 0.2s; z-index: 10; backdrop-filter: blur(2px); border-radius: inherit;
-        }
+        .editable-image-container::after { content: '✎ Rigenera Immagine'; position: absolute; inset: 0; background: rgba(0,0,0,0.6); color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1rem; opacity: 0; transition: opacity 0.2s; z-index: 10; backdrop-filter: blur(2px); border-radius: inherit; }
         .editable-image-container:hover::after { opacity: 1; }
         
         @media print {
@@ -213,6 +172,13 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; }
         .close-modal { cursor: pointer; color: #94a3b8; transition: 0.2s; }
         .close-modal:hover { color: #f8fafc; }
+
+        /* A+ Banners */
+        .aplus-container { display: flex; flex-direction: column; gap: 24px; align-items: center; width: 100%; }
+        .aplus-banner { width: 970px; height: 300px; position: relative; overflow: hidden; display: flex; box-sizing: border-box; flex-shrink: 0; }
+        .editable-text { outline: none; padding: 2px; border-radius: 4px; transition: 0.2s; }
+        .editable-text:hover, .editable-text:focus { background: rgba(0,0,0,0.05); box-shadow: 0 0 0 1px rgba(0,0,0,0.1); }
+        .aplus-banner[style*="#0f172a"] .editable-text:hover, .aplus-banner[style*="#0f172a"] .editable-text:focus { background: rgba(255,255,255,0.1); box-shadow: 0 0 0 1px rgba(255,255,255,0.3); }
 
         /* Toasts */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
@@ -262,6 +228,27 @@
                     </div>
 
                     <div class="mb-4">
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Lista Ricette (Separate da virgola - Ignora N. Ricette)</label>
+                        <textarea id="customRecipeList" class="w-full h-16 p-3 bg-slate-900 border border-slate-700 rounded focus:ring-1 focus:ring-yellow-500 outline-none text-sm resize-none text-slate-200" placeholder="e.g. 'Pollo al Limone, Pasta al Pesto'"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mb-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1.5">N. Ricette Auto</label>
+                            <input type="number" id="recipeCount" value="2" min="1" max="100" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded outline-none text-sm text-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1.5">Porzioni/Persone</label>
+                            <input type="number" id="servingsCount" value="4" min="1" max="20" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded outline-none text-sm text-slate-200">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-amber-400 mb-1.5">Ambientazione Visiva (Etnia, Mani, Stile)</label>
+                        <textarea id="visualSetting" class="w-full h-12 p-3 bg-slate-900 border border-slate-700 rounded focus:ring-1 focus:ring-amber-500 outline-none text-sm resize-none text-slate-200" placeholder="es. 'Africa Centrale, mani scure, pentole in terracotta'"></textarea>
+                    </div>
+
+                    <div class="mb-4">
                         <label class="block text-xs font-medium text-purple-400 mb-1.5">Istruzioni Specifiche (Opzionale)</label>
                         <textarea id="bookStyle" class="w-full h-16 p-3 bg-slate-900 border border-slate-700 rounded focus:ring-1 focus:ring-purple-500 outline-none text-sm resize-none text-slate-200" placeholder="e.g. 'Usa un tono accademico, niente burro, usa ingredienti ricchi di calcio'"></textarea>
                     </div>
@@ -285,7 +272,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <label class="block text-xs font-medium text-emerald-400 mb-1.5">Gabbia (Trim Size)</label>
                         <select id="trimSize" class="w-full p-2.5 bg-slate-900 border border-emerald-700/50 rounded outline-none text-sm text-emerald-100 cursor-pointer focus:ring-1 focus:ring-emerald-500 transition-all">
                             <option value="5x8">5 x 8 in. (12.7 x 20.32 cm)</option>
@@ -293,11 +280,6 @@
                             <option value="7x10">7 x 10 in. (17.78 x 25.4 cm)</option>
                             <option value="8.5x11" selected>8.5 x 11 in. (21.59 x 27.94 cm)</option>
                         </select>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Numero di Ricette (9 Step ciascuna)</label>
-                        <input type="number" id="recipeCount" value="2" min="1" max="100" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded outline-none text-sm text-slate-200">
                     </div>
                 </div>
                 
@@ -375,7 +357,7 @@
     <div id="aplusModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="text-xl font-serif text-f8fafc flex items-center gap-2"><svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg> A+ Content Studio (Amazon Bestseller)</h2>
+                <h2 class="text-xl font-serif text-f8fafc flex items-center gap-2"><svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg> A+ Content Studio (3D Edition)</h2>
                 <div class="flex gap-3">
                     <button id="btnRegenerateAPlus" class="bg-slate-700 hover:bg-slate-600 text-white text-sm px-4 py-2 rounded transition-all flex items-center gap-2 shadow">
                         <span id="btnRegenAPlusText">Rigenera Testi</span><div id="btnRegenAPlusLoader" class="loader hidden"></div>
@@ -386,7 +368,7 @@
                     <svg class="w-6 h-6 close-modal ml-2 mt-1" id="closeAPlusModal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </div>
             </div>
-            <p class="text-xs text-slate-400 mb-1 text-center">Banner formattati 970x300. Clicca sui testi per modificarli manualmente prima di scaricare.</p>
+            <p class="text-xs text-slate-400 mb-1 text-center">Banner formattati 970x300. Il sistema crea veri mockups 3D partendo dalle pagine del tuo libro.</p>
             <div class="aplus-container overflow-y-auto pb-4" id="aplusBannersContainer"></div>
         </div>
     </div>
@@ -413,6 +395,7 @@
             btnStart: document.getElementById('btnStartAutoPilot'), btnText: document.getElementById('btnStartText'), btnLoader: document.getElementById('btnStartLoader'),
             topicInput: document.getElementById('bookTopic'), styleInput: document.getElementById('bookStyle'), languageInput: document.getElementById('bookLanguage'), countInput: document.getElementById('recipeCount'), trimSize: document.getElementById('trimSize'),
             bookPage: document.getElementById('bookPage'), apiKeyInput: document.getElementById('apiKeyInput'),
+            customRecipeList: document.getElementById('customRecipeList'), servingsCount: document.getElementById('servingsCount'), visualSetting: document.getElementById('visualSetting'),
             savePdfBtn: document.getElementById('savePdfBtn'), saveEpubBtn: document.getElementById('saveEpubBtn'), btnLiveTranslate: document.getElementById('btnLiveTranslate'),
             btnSaveProject: document.getElementById('btnSaveProject'), btnLoadProject: document.getElementById('btnLoadProject'), fileLoadProject: document.getElementById('fileLoadProject'),
             progressSection: document.getElementById('progressSection'), progressStatus: document.getElementById('progressStatus'), progressCount: document.getElementById('progressCount'), progressBar: document.getElementById('progressBar'),
@@ -429,17 +412,16 @@
         let globalTocEntries = [];
 
         const i18n = {
-            "English (US)": { prep: "Prep Time", cook: "Cook Time", diff: "Difficulty", serv: "Servings", nut: "Nutrition", ingr: "Ingredients", step: "Step", toc: "Table of Contents" },
-            "Italiano": { prep: "Preparazione", cook: "Cottura", diff: "Difficoltà", serv: "Porzioni", nut: "Nutrizione", ingr: "Ingredienti", step: "Passo", toc: "Indice" },
-            "Español": { prep: "Preparación", cook: "Cocción", diff: "Dificultad", serv: "Porciones", nut: "Nutrición", ingr: "Ingredientes", step: "Paso", toc: "Índice" },
-            "Français": { prep: "Préparation", cook: "Cuisson", diff: "Difficulté", serv: "Portions", nut: "Nutrition", ingr: "Ingrédients", step: "Étape", toc: "Table des matières" },
-            "Deutsch": { prep: "Vorbereitung", cook: "Kochzeit", diff: "Schwierigkeit", serv: "Portionen", nut: "Nährwerte", ingr: "Zutaten", step: "Schritt", toc: "Inhaltsverzeichnis" },
-            "Português": { prep: "Preparação", cook: "Cozimento", diff: "Dificuldade", serv: "Porções", nut: "Nutrição", ingr: "Ingredientes", step: "Passo", toc: "Índice" },
-            "Polski": { prep: "Czas przyg.", cook: "Czas got.", diff: "Trudność", serv: "Porcje", nut: "Wartości odż.", ingr: "Składniki", step: "Krok", toc: "Spis Treści" },
-            "日本語 (Japanese)": { prep: "準備時間", cook: "調理時間", diff: "難易度", serv: "分量", nut: "栄養", ingr: "材料", step: "ステップ", toc: "目次" }
+            "English (US)": { prep: "Prep Time", cook: "Cook Time", diff: "Difficulty", serv: "Servings", nut: "Nutrition", ingr: "Ingredients", step: "Step", toc: "Table of Contents", cal: "Calories", pro: "Protein", carb: "Carbs", fat: "Fat", ca: "Calcium", vitd: "Vitamin D", mag: "Magnesium", perServing: "Per 1 Serving" },
+            "Italiano": { prep: "Preparazione", cook: "Cottura", diff: "Difficoltà", serv: "Porzioni", nut: "Valori Nutrizionali", ingr: "Ingredienti", step: "Passo", toc: "Indice", cal: "Calorie", pro: "Proteine", carb: "Carboidrati", fat: "Grassi", ca: "Calcio", vitd: "Vitamina D", mag: "Magnesio", perServing: "Per 1 Porzione" },
+            "Español": { prep: "Preparación", cook: "Cocción", diff: "Dificultad", serv: "Porciones", nut: "Nutrición", ingr: "Ingredientes", step: "Paso", toc: "Índice", cal: "Calorías", pro: "Proteínas", carb: "Carbohidratos", fat: "Grasas", ca: "Calcio", vitd: "Vitamina D", mag: "Magnesio", perServing: "Por 1 Porción" },
+            "Français": { prep: "Préparation", cook: "Cuisson", diff: "Difficulté", serv: "Portions", nut: "Nutrition", ingr: "Ingrédients", step: "Étape", toc: "Table des matières", cal: "Calories", pro: "Protéines", carb: "Glucides", fat: "Lipides", ca: "Calcium", vitd: "Vitamine D", mag: "Magnésium", perServing: "Pour 1 Portion" },
+            "Deutsch": { prep: "Vorbereitung", cook: "Kochzeit", diff: "Schwierigkeit", serv: "Portionen", nut: "Nährwerte", ingr: "Zutaten", step: "Schritt", toc: "Inhaltsverzeichnis", cal: "Kalorien", pro: "Protein", carb: "Kohlenhydrate", fat: "Fett", ca: "Kalzium", vitd: "Vitamin D", mag: "Magnesium", perServing: "Pro 1 Portion" },
+            "Português": { prep: "Preparação", cook: "Cozimento", diff: "Dificuldade", serv: "Porções", nut: "Nutrição", ingr: "Ingredientes", step: "Passo", toc: "Índice", cal: "Calorias", pro: "Proteínas", carb: "Carboidratos", fat: "Gorduras", ca: "Cálcio", vitd: "Vitamina D", mag: "Magnésio", perServing: "Por 1 Porção" },
+            "Polski": { prep: "Czas przyg.", cook: "Czas got.", diff: "Trudność", serv: "Porcje", nut: "Wartości odż.", ingr: "Składniki", step: "Krok", toc: "Spis Treści", cal: "Kalorie", pro: "Białko", carb: "Węglowodany", fat: "Tłuszcz", ca: "Wapń", vitd: "Witamina D", mag: "Magnez", perServing: "Na 1 Porcję" },
+            "日本語 (Japanese)": { prep: "準備時間", cook: "調理時間", diff: "難易度", serv: "分量", nut: "栄養", ingr: "材料", step: "ステップ", toc: "目次", cal: "カロリー", pro: "タンパク質", carb: "炭水化物", fat: "脂質", ca: "カルシウム", vitd: "ビタミンD", mag: "マグネシウム", perServing: "1人分" }
         };
 
-        // NEW: Dynamic Measurement Localization Engine
         function getMeasurementRules(lang) {
             if (lang === "English (US)") {
                 return `CRITICAL MEASUREMENTS (ENGLISH): You MUST use IMPERIAL units (oz, lbs, cups, tbsp, tsp, °F) as the primary unit. You MUST also include the METRIC equivalent (g, ml, °C) wrapped EXACTLY in this HTML tag: <span class="unit-alt">(...)</span>. Example: "7 oz <span class="unit-alt">(200g)</span> flour" or "350°F <span class="unit-alt">(175°C)</span>".`;
@@ -454,7 +436,6 @@ Apply these strict Japanese localization rules:
 6. Celsius: Use ℃ (e.g., "180℃").
 Example output: "パーム油 大さじ2" or "米 1カップ".`;
             } else {
-                // European Languages
                 return `CRITICAL MEASUREMENTS (EUROPEAN): You MUST use ONLY METRIC units (g, ml, °C). DO NOT include Imperial units (oz, lbs, F). DO NOT use <span class="unit-alt">.
 Apply these strict localization rules for spoons based on the target language:
 - French (Français): Tablespoon = c. à s. | Teaspoon = c. à c.
@@ -536,7 +517,7 @@ Example for German: "1 EL Tomatenmark, 200g Reis".`;
         }
 
         async function callGeminiImage(prompt, aspect, maxWidth = 1000, quality = 0.85) {
-            const safetyAppend = ". Clean professional food photography, beautifully lit, highly detailed, no people, absolutely NO TEXT, NO LETTERS, NO NUMBERS in image. Purely food visual.";
+            const safetyAppend = ". Clean professional food photography, beautifully lit, highly detailed, strictly NO people, absolutely NO TEXT, NO LETTERS, NO NUMBERS in image. Purely food visual.";
             const urlGen = () => `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${getAPIKey()}`;
             const optGen = () => ({
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -554,7 +535,7 @@ Example for German: "1 EL Tomatenmark, 200g Reis".`;
             return null;
         }
 
-        async function processImageToBlobUrl(base64Str, maxWidth = 1500, quality = 0.85) {
+        async function processImageToBlobUrl(base64Str, maxWidth = 2400, quality = 0.85) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => {
@@ -635,7 +616,11 @@ Example for German: "1 EL Tomatenmark, 200g Reis".`;
             const topic = DOM.topicInput.value.trim(); 
             const lang = DOM.languageInput.value; 
             const numRecipes = parseInt(DOM.countInput.value);
-            if(!topic) return showToast("Fornisci un Argomento/Nicchia.", "warning");
+            const customList = DOM.customRecipeList.value.trim();
+            const servingsCount = DOM.servingsCount.value || 4;
+            const visualSetting = DOM.visualSetting.value.trim();
+            
+            if(!topic && !customList) return showToast("Fornisci un Argomento/Nicchia o una Lista Ricette.", "warning");
 
             DOM.btnStart.disabled = true; DOM.btnText.classList.add('hidden'); DOM.btnLoader.classList.remove('hidden');
             DOM.progressSection.classList.remove('hidden');
@@ -650,42 +635,50 @@ Example for German: "1 EL Tomatenmark, 200g Reis".`;
             
             const specificInstructions = DOM.styleInput.value.trim();
             const instructionInjection = specificInstructions ? ` CRITICAL CUSTOM INSTRUCTIONS: ${specificInstructions}.` : "";
+            const visualSettingPrompt = visualSetting ? `. CRITICAL VISUAL REQUIREMENT: Set all image prompts in this exact setting/ethnicity: "${visualSetting}". Hands, skin tone, props, and lighting MUST deeply reflect this.` : '';
 
             try {
                 updateStatus(`Generazione menu in ${lang}...`, 5);
-                const tocSys = `You are a Michelin-star chef and master culinary editor. 
+                
+                let recipeArray = [];
+                if (customList) {
+                    recipeArray = customList.split(',').map(s => s.trim()).filter(s => s);
+                } else {
+                    const tocSys = `You are a Michelin-star chef and master culinary editor. 
 CRITICAL LANGUAGE: Output ALL recipe titles 100% strictly in ${lang.toUpperCase()}. No English allowed.
 Return ONLY a valid JSON array of strings containing highly sophisticated recipe titles.${instructionInjection}`;
-                const tocData = await callGemini(`Generate exactly ${numRecipes} unique recipe names in ${lang.toUpperCase()} for a cookbook themed: "${topic}". JSON array only.`, tocSys);
+                    recipeArray = await callGemini(`Generate exactly ${numRecipes} unique recipe names in ${lang.toUpperCase()} for a cookbook themed: "${topic}". JSON array only.`, tocSys);
+                }
 
-                for(let i = 0; i < tocData.length; i++) {
-                    const rName = tocData[i];
-                    updateStatus(`Scrittura: ${rName}...`, ((i)/tocData.length)*100, i+1, tocData.length);
+                for(let i = 0; i < recipeArray.length; i++) {
+                    const rName = recipeArray[i];
+                    updateStatus(`Scrittura: ${rName}...`, ((i)/recipeArray.length)*100, i+1, recipeArray.length);
                     
                     try {
                         const recipeSys = `You are an elite culinary writer and senior nutritional specialist.
 CRITICAL LANGUAGE REQUIREMENT: 100% of narrative text, descriptions, ingredients, labels and steps MUST be written STRICTLY in ${lang.toUpperCase()}. No English allowed (except for image prompts).
 ${getMeasurementRules(lang)}
-CRITICAL NUTRITION: Calculate exact values for Calcium (Ca), Vitamin D (Vit D), and Magnesium (Mag) alongside Pro/Carbs/Fat. Format exactly like this: "Pro: 25g | Carbs: 45g | Fat: 18g | Ca: 420mg | Vit D: 16mcg | Mag: 110mg".
+CRITICAL NUTRITION: Calculate exact values PER 1 SERVING. Format macros directly in strings as requested.
 
 CRITICAL STEPS: Provide EXACTLY ${totalStepsRequired} steps.
+${visualSettingPrompt}
+${instructionInjection}
 
 Schema:
 { 
   "description": "Creative blurb in ${lang.toUpperCase()}.", 
-  "labels": { "prepTime": "15m", "cookTime": "45m", "difficulty": "Translated word for Medium/Easy", "servings": "4" },
-  "calories": "450 kcal", 
-  "macros": "Pro: 25g | Carbs: 45g | Fat: 18g | Ca: 420mg | Vit D: 16mcg | Mag: 110mg", 
+  "labels": { "prepTime": "15m", "cookTime": "45m", "difficulty": "Translated word for Medium/Easy", "servings": "${servingsCount}" },
+  "nutrition": { "calories": "450", "protein": "25g", "carbs": "45g", "fat": "18g", "calcium": "420mg", "vitD": "16mcg", "magnesium": "110mg" },
   "ingredients": ["..."], 
   "steps": [ { "title": "Step title in ${lang.toUpperCase()}", "instruction": "Clear action instruction in ${lang.toUpperCase()}.", "imagePrompt": "Action visual prompt in ENGLISH." } ], 
   "visualPromptFinished": "Plated dish prompt in ENGLISH.",
   "visualPromptIngredients": "Raw ingredients arranged beautifully on a table, overhead flatlay shot, ENGLISH."
 }`;
-                        const rData = await callGemini(`Write full data for "${rName}". Exactly ${totalStepsRequired} steps. Language: ${lang}. Output strictly valid JSON.`, recipeSys);
+                        const rData = await callGemini(`Write full data for "${rName}". Exactly ${totalStepsRequired} steps. Servings: ${servingsCount}. Language: ${lang}. Output strictly valid JSON.`, recipeSys);
 
                         // Page 1: Bleed Photo (Finished Plated Dish)
                         currentPhysicalPage++; 
-                        updateStatus(`Fotografia piatto: ${rName}...`, null, i+1, tocData.length);
+                        updateStatus(`Fotografia piatto: ${rName}...`, null, i+1, recipeArray.length);
                         const imgFin = await callGeminiImage(rData.visualPromptFinished, layoutInfo.widthIn > layoutInfo.heightIn ? '16:9' : '3:4', 2400, 0.9);
                         if(imgFin) generatedImages.push({url: imgFin, title: rName});
                         const imgFallback = imgFin || `https://placehold.co/800/1e293b/fff?text=${encodeURIComponent(rName)}`;
@@ -696,22 +689,41 @@ Schema:
                         currentPhysicalPage++; 
                         globalTocEntries.push({ title: rName, pageNum: currentPhysicalPage }); 
                         DOM.bookPage.insertAdjacentHTML('beforeend', `
-                            <div class="page-text recipe-block" data-recipe-id="${i}" style="justify-content: center;">
+                            <div class="page-text recipe-block" data-recipe-id="${i}" style="justify-content: flex-start; padding-top: calc(var(--safe-margin-px) * 1.5);">
                                 <h1 class="doc-h1">${rName}</h1>
                                 <p class="doc-quote">"${rData.description}"</p>
-                                <div class="info-grid">
-                                    <div class="info-card"><div class="info-icon"><svg class="text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><div class="info-text"><span class="info-label">${labels.prep}</span><span class="info-value prep-val">${rData.labels.prepTime}</span></div></div>
-                                    <div class="info-card"><div class="info-icon"><svg class="text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg></div><div class="info-text"><span class="info-label">${labels.cook}</span><span class="info-value cook-val">${rData.labels.cookTime}</span></div></div>
-                                    <div class="info-card"><div class="info-icon"><svg class="text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg></div><div class="info-text"><span class="info-label">${labels.diff}</span><span class="info-value diff-val">${rData.labels.difficulty}</span></div></div>
-                                    <div class="info-card"><div class="info-icon"><svg class="text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div><div class="info-text"><span class="info-label">${labels.serv}</span><span class="info-value serv-val">${rData.labels.servings}</span></div></div>
-                                    <div class="macros-card"><div class="info-icon"><svg class="text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg></div><div class="info-text"><span class="info-label">${labels.nut}</span><span class="info-value nut-val"><strong>${rData.calories}</strong> &bull; ${rData.macros}</span></div></div>
+                                
+                                <div class="recipe-meta-bar">
+                                    <div class="meta-item"><span class="meta-val prep-val">${rData.labels.prepTime}</span><span class="meta-lbl lbl-prep">${labels.prep}</span></div>
+                                    <div class="meta-item"><span class="meta-val cook-val">${rData.labels.cookTime}</span><span class="meta-lbl lbl-cook">${labels.cook}</span></div>
+                                    <div class="meta-item"><span class="meta-val diff-val">${rData.labels.difficulty}</span><span class="meta-lbl lbl-diff">${labels.diff}</span></div>
+                                    <div class="meta-item"><span class="meta-val serv-val">${rData.labels.servings}</span><span class="meta-lbl lbl-serv">${labels.serv}</span></div>
+                                </div>
+
+                                <div class="nutrition-panel">
+                                    <div class="nut-header">
+                                        <h3 class="nut-title lbl-nut">${labels.nut}</h3>
+                                        <span class="nut-subtitle lbl-perserving">${labels.perServing}</span>
+                                    </div>
+                                    <div class="nut-row" style="border-bottom: 2px solid #0f172a; margin-bottom: 8px; padding-bottom: 8px;">
+                                        <span class="nut-lbl lbl-cal" style="font-weight: 700; color: #0f172a;">${labels.cal}</span>
+                                        <span class="nut-val-txt nut-cal" style="font-size: 12pt;">${rData.nutrition.calories}</span>
+                                    </div>
+                                    <div class="nut-grid">
+                                        <div class="nut-row"><span class="nut-lbl lbl-pro">${labels.pro}</span><span class="nut-val-txt nut-pro">${rData.nutrition.protein}</span></div>
+                                        <div class="nut-row"><span class="nut-lbl lbl-ca">${labels.ca}</span><span class="nut-val-txt nut-ca">${rData.nutrition.calcium}</span></div>
+                                        <div class="nut-row"><span class="nut-lbl lbl-carb">${labels.carb}</span><span class="nut-val-txt nut-carb">${rData.nutrition.carbs}</span></div>
+                                        <div class="nut-row"><span class="nut-lbl lbl-vitd">${labels.vitd}</span><span class="nut-val-txt nut-vitd">${rData.nutrition.vitD}</span></div>
+                                        <div class="nut-row"><span class="nut-lbl lbl-fat">${labels.fat}</span><span class="nut-val-txt nut-fat">${rData.nutrition.fat}</span></div>
+                                        <div class="nut-row"><span class="nut-lbl lbl-mag">${labels.mag}</span><span class="nut-val-txt nut-mag">${rData.nutrition.magnesium}</span></div>
+                                    </div>
                                 </div>
                             </div>
                         `);
 
                         // Page 3: Ingredients Bleed Photo
                         currentPhysicalPage++;
-                        updateStatus(`Fotografia ingredienti: ${rName}...`, null, i+1, tocData.length);
+                        updateStatus(`Fotografia ingredienti: ${rName}...`, null, i+1, recipeArray.length);
                         const imgIngr = await callGeminiImage(rData.visualPromptIngredients, layoutInfo.widthIn > layoutInfo.heightIn ? '16:9' : '3:4', 2400, 0.9);
                         if(imgIngr) generatedImages.push({url: imgIngr, title: rName + " Ingredients"});
                         const imgIngrFallback = imgIngr || `https://placehold.co/800/1e293b/fff?text=${encodeURIComponent('Ingredients')}`;
@@ -724,7 +736,7 @@ Schema:
                         DOM.bookPage.insertAdjacentHTML('beforeend', `
                             <div class="page-text recipe-block" data-recipe-id="${i}">
                                 <div class="ingredients-container">
-                                    <h2 class="doc-h2" style="align-self: flex-start;">${labels.ingr}</h2>
+                                    <h2 class="doc-h2 lbl-ingr" style="align-self: flex-start;">${labels.ingr}</h2>
                                     <div class="ingredients-grid-2col">${renderIngCol(rData.ingredients)}</div>
                                 </div>
                             </div>
@@ -739,7 +751,7 @@ Schema:
                             let stepsHtml = '';
 
                             for(let s = sIdx; s < eIdx; s++) {
-                                updateStatus(`Fotografia ${labels.step} ${s+1} (${rName})...`, null, i+1, tocData.length);
+                                updateStatus(`Fotografia ${labels.step} ${s+1} (${rName})...`, null, i+1, recipeArray.length);
                                 const imgStep = await callGeminiImage(rData.steps[s].imagePrompt, '1:1', 1000, 0.85);
                                 const imgStepFallback = imgStep || `https://placehold.co/300/f8fafc/0f172a?text=${labels.step}+${s+1}`;
                                 stepsHtml += `
@@ -772,7 +784,7 @@ Schema:
                 globalTocEntries.forEach(e => { tocHTML += `<div class="toc-item"><span class="toc-title">${e.title}</span><div class="toc-leader"></div><span class="toc-page">${e.pageNum}</span></div>`; });
                 DOM.bookPage.insertAdjacentHTML('beforeend', tocHTML + `</div></div>`);
                 
-                updateStatus("Libro Completato!", 100, tocData.length, tocData.length);
+                updateStatus("Libro Completato!", 100, recipeArray.length, recipeArray.length);
                 showToast("Libro generato con successo!", "success");
             } catch(e) { 
                 showToast(e.message, "error"); 
@@ -797,13 +809,25 @@ Schema:
                 if(pages.length === 0) continue;
                 pages[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                const elTitle = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .doc-h1`);
-                const elDesc = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .doc-quote`);
-                const elMacros = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .nut-val`);
-                const elPrep = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .prep-val`);
-                const elCook = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .cook-val`);
-                const elDiff = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .diff-val`);
-                const elServ = document.querySelector(`.recipe-block[data-recipe-id="${i}"] .serv-val`);
+                let titleNode, descNode, prepNode, cookNode, diffNode, servNode;
+                let calNode, proNode, caNode, carbNode, vitdNode, fatNode, magNode;
+                
+                pages.forEach(p => {
+                    if(!titleNode) titleNode = p.querySelector('.doc-h1');
+                    if(!descNode) descNode = p.querySelector('.doc-quote');
+                    if(!prepNode) prepNode = p.querySelector('.prep-val');
+                    if(!cookNode) cookNode = p.querySelector('.cook-val');
+                    if(!diffNode) diffNode = p.querySelector('.diff-val');
+                    if(!servNode) servNode = p.querySelector('.serv-val');
+                    if(!calNode) calNode = p.querySelector('.nut-cal');
+                    if(!proNode) proNode = p.querySelector('.nut-pro');
+                    if(!caNode) caNode = p.querySelector('.nut-ca');
+                    if(!carbNode) carbNode = p.querySelector('.nut-carb');
+                    if(!vitdNode) vitdNode = p.querySelector('.nut-vitd');
+                    if(!fatNode) fatNode = p.querySelector('.nut-fat');
+                    if(!magNode) magNode = p.querySelector('.nut-mag');
+                });
+
                 const rIngrElements = Array.from(document.querySelectorAll(`.recipe-block[data-recipe-id="${i}"] .ingr-text`));
                 const rStepTitles = Array.from(document.querySelectorAll(`.recipe-block[data-recipe-id="${i}"] .step-title-text`));
                 const rStepDesc = Array.from(document.querySelectorAll(`.recipe-block[data-recipe-id="${i}"] .step-desc`));
@@ -812,23 +836,27 @@ Schema:
                     const transSys = `You are a professional culinary translator translating strictly to ${tLang.toUpperCase()}. 
 CRITICAL LANGUAGE RULE: Ensure 100% of the text is translated to ${tLang.toUpperCase()}. Do NOT leave any words in the original language.
 ${getMeasurementRules(tLang)}
-CRITICAL HTML: Preserve HTML formatting tags like <strong>. 
+CRITICAL HTML: Preserve HTML formatting tags like <strong> and <span class="unit-alt">. 
 Output strictly JSON. Schema:
 {
-  "title": "...", "desc": "...", "macrosHTML": "...",
+  "title": "...", "desc": "...",
   "prep": "...", "cook": "...", "diff": "...", "serv": "...",
+  "nutrition": { "cal": "...", "pro": "...", "carb": "...", "fat": "...", "ca": "...", "vitd": "...", "mag": "..." },
   "ingredients": ["...", "..."],
   "stepTitles": ["...", "..."],
   "stepDesc": ["...", "..."]
 }`;
                     const payload = { 
-                        title: elTitle ? elTitle.innerText : "", 
-                        desc: elDesc ? elDesc.innerText : "", 
-                        macrosHTML: elMacros ? elMacros.innerHTML : "",
-                        prep: elPrep ? elPrep.innerText : "",
-                        cook: elCook ? elCook.innerText : "",
-                        diff: elDiff ? elDiff.innerText : "",
-                        serv: elServ ? elServ.innerText : "",
+                        title: titleNode ? titleNode.innerText : "", 
+                        desc: descNode ? descNode.innerText : "", 
+                        prep: prepNode ? prepNode.innerText : "",
+                        cook: cookNode ? cookNode.innerText : "",
+                        diff: diffNode ? diffNode.innerText : "",
+                        serv: servNode ? servNode.innerText : "",
+                        nutrition: {
+                            cal: calNode ? calNode.innerText : "", pro: proNode ? proNode.innerText : "", carb: carbNode ? carbNode.innerText : "",
+                            fat: fatNode ? fatNode.innerText : "", ca: caNode ? caNode.innerText : "", vitd: vitdNode ? vitdNode.innerText : "", mag: magNode ? magNode.innerText : ""
+                        },
                         ingredients: rIngrElements.map(el => el.innerHTML), 
                         stepTitles: rStepTitles.map(e=>e.innerText), 
                         stepDesc: rStepDesc.map(e=>e.innerText) 
@@ -836,24 +864,48 @@ Output strictly JSON. Schema:
                     
                     const transData = await callGemini(`Translate this: ${JSON.stringify(payload)}`, transSys);
                     
-                    if(elTitle && transData.title) elTitle.innerText = transData.title;
-                    if(elDesc && transData.desc) elDesc.innerText = transData.desc;
-                    if(elMacros && transData.macrosHTML) elMacros.innerHTML = transData.macrosHTML;
-                    if(elPrep && transData.prep) elPrep.innerText = transData.prep;
-                    if(elCook && transData.cook) elCook.innerText = transData.cook;
-                    if(elDiff && transData.diff) elDiff.innerText = transData.diff;
-                    if(elServ && transData.serv) elServ.innerText = transData.serv;
+                    if(titleNode && transData.title) titleNode.innerText = transData.title;
+                    if(descNode && transData.desc) descNode.innerText = transData.desc;
+                    if(prepNode && transData.prep) prepNode.innerText = transData.prep;
+                    if(cookNode && transData.cook) cookNode.innerText = transData.cook;
+                    if(diffNode && transData.diff) diffNode.innerText = transData.diff;
+                    if(servNode && transData.serv) servNode.innerText = transData.serv;
+                    
+                    if(transData.nutrition) {
+                        if(calNode && transData.nutrition.cal) calNode.innerText = transData.nutrition.cal;
+                        if(proNode && transData.nutrition.pro) proNode.innerText = transData.nutrition.pro;
+                        if(carbNode && transData.nutrition.carb) carbNode.innerText = transData.nutrition.carb;
+                        if(fatNode && transData.nutrition.fat) fatNode.innerText = transData.nutrition.fat;
+                        if(caNode && transData.nutrition.ca) caNode.innerText = transData.nutrition.ca;
+                        if(vitdNode && transData.nutrition.vitd) vitdNode.innerText = transData.nutrition.vitd;
+                        if(magNode && transData.nutrition.mag) magNode.innerText = transData.nutrition.mag;
+                    }
+
                     rIngrElements.forEach((el, idx) => { if(transData.ingredients[idx]) el.innerHTML = transData.ingredients[idx]; });
                     rStepTitles.forEach((el, idx) => { if(transData.stepTitles[idx]) el.innerHTML = transData.stepTitles[idx]; });
                     rStepDesc.forEach((el, idx) => { if(transData.stepDesc[idx]) el.innerHTML = transData.stepDesc[idx]; });
                     
                     pages.forEach(p => {
-                        p.querySelectorAll('.info-label').forEach((lbl, idx) => { const keys = ['prep','cook','diff','serv','nut']; if(idx<keys.length) lbl.innerText = labels[keys[idx]]; });
-                        p.querySelectorAll('h2.doc-h2').forEach(h2 => { 
-                            if(h2.innerText.match(/\d/)) { h2.innerText = h2.innerText.replace(/^[^\d]+/, labels.step + ' '); } 
-                            else if(h2.innerText.length > 2) { h2.innerText = labels.ingr; }
+                        p.querySelectorAll('.lbl-prep').forEach(l => l.innerText = labels.prep);
+                        p.querySelectorAll('.lbl-cook').forEach(l => l.innerText = labels.cook);
+                        p.querySelectorAll('.lbl-diff').forEach(l => l.innerText = labels.diff);
+                        p.querySelectorAll('.lbl-serv').forEach(l => l.innerText = labels.serv);
+                        p.querySelectorAll('.lbl-nut').forEach(l => l.innerText = labels.nut);
+                        p.querySelectorAll('.lbl-perserving').forEach(l => l.innerText = labels.perServing);
+                        p.querySelectorAll('.lbl-cal').forEach(l => l.innerText = labels.cal);
+                        p.querySelectorAll('.lbl-pro').forEach(l => l.innerText = labels.pro);
+                        p.querySelectorAll('.lbl-carb').forEach(l => l.innerText = labels.carb);
+                        p.querySelectorAll('.lbl-fat').forEach(l => l.innerText = labels.fat);
+                        p.querySelectorAll('.lbl-ca').forEach(l => l.innerText = labels.ca);
+                        p.querySelectorAll('.lbl-vitd').forEach(l => l.innerText = labels.vitd);
+                        p.querySelectorAll('.lbl-mag').forEach(l => l.innerText = labels.mag);
+                        p.querySelectorAll('.lbl-ingr').forEach(h2 => h2.innerText = labels.ingr);
+                        p.querySelectorAll('.steps-header-box h2').forEach(h2 => {
+                            if(h2.innerText.match(/\d/)) h2.innerText = h2.innerText.replace(/^[^\d]+/, labels.step + ' ');
                         });
-                        p.querySelectorAll('.step-title').forEach(st => { st.innerHTML = st.innerHTML.replace(/^[^\d]+/, labels.step + ' '); });
+                        p.querySelectorAll('.step-title').forEach(st => {
+                            st.innerHTML = st.innerHTML.replace(/^[^\d]+/, labels.step + ' ');
+                        });
                     });
                     
                     if(transData.title) globalTocEntries[i].title = transData.title;
@@ -919,11 +971,9 @@ Output strictly JSON. Schema:
                 for (let i = 0; i < pages.length; i++) {
                     let p = pages[i].cloneNode(true);
                     let imgs = p.querySelectorAll('img');
-                    imgs.forEach(img => {
-                        if (imageMap.has(img.src)) img.src = `images/${imageMap.get(img.src)}`;
-                    });
+                    imgs.forEach(img => { if (imageMap.has(img.src)) img.src = `images/${imageMap.get(img.src)}`; });
                     
-                    let pageHtml = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Page ${fileCounter}</title><style>body{font-family:sans-serif; margin: 0; padding: 5%;} img{max-width:100%; height:auto;}</style></head><body>${p.innerHTML}</body></html>`;
+                    let pageHtml = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Page ${fileCounter}</title><style>body{font-family:sans-serif; margin: 0; padding: 5%;} img{max-width:100%; height:auto;} .step-row { margin-bottom: 20px; } .step-img-box { float: left; width: 150px; margin-right: 15px; } .step-content { overflow: hidden; } .ingr-item { margin-bottom: 10px; } .nutrition-panel { border: 1px solid #ccc; padding: 15px; margin: 20px 0; }</style></head><body>${p.innerHTML}</body></html>`;
                     
                     const filename = `page_${fileCounter}.xhtml`;
                     oebps.file(filename, pageHtml);
@@ -973,9 +1023,10 @@ Output strictly JSON. Schema:
                 }
                 
                 const projectData = {
-                    version: "2.1", topic: DOM.topicInput.value, style: DOM.styleInput.value,
+                    version: "3.5", topic: DOM.topicInput.value, style: DOM.styleInput.value,
                     language: DOM.languageInput.value, trimSize: document.getElementById('trimSize').value,
-                    recipeCount: DOM.countInput.value, toc: globalTocEntries, html: tempDiv.innerHTML
+                    recipeCount: DOM.countInput.value, customList: DOM.customRecipeList.value, servings: DOM.servingsCount.value, visualSetting: DOM.visualSetting.value,
+                    toc: globalTocEntries, html: tempDiv.innerHTML
                 };
                 
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectData));
@@ -998,6 +1049,9 @@ Output strictly JSON. Schema:
                     if (data.language) DOM.languageInput.value = data.language;
                     if (data.trimSize) document.getElementById('trimSize').value = data.trimSize;
                     if (data.recipeCount) DOM.countInput.value = data.recipeCount;
+                    if (data.customList) DOM.customRecipeList.value = data.customList;
+                    if (data.servings) DOM.servingsCount.value = data.servings;
+                    if (data.visualSetting) DOM.visualSetting.value = data.visualSetting;
                     if (data.toc) globalTocEntries = data.toc;
                     
                     applyLayoutEngine();
@@ -1023,7 +1077,7 @@ Output strictly JSON. Schema:
         DOM.btnCancelReset.addEventListener('click', () => DOM.resetConfirmModal.classList.remove('show'));
         DOM.btnConfirmReset.addEventListener('click', () => {
             DOM.bookPage.innerHTML = `<div class="page-text" style="justify-content: center; align-items: center;" id="welcomePlaceholder"><h1 class="doc-title" style="font-family: 'Playfair Display', serif; color: #94a3b8; font-size: calc(3rem * var(--font-scale)); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #eab308; padding-bottom: 20px; outline: none;">Premium Edition</h1><p style="font-family: 'Inter', sans-serif; color: #64748b; font-size: calc(12pt * var(--font-scale)); margin-top: 20px; font-style: italic; outline: none;">Exclusive Culinary Collection</p></div>`;
-            generatedImages = []; globalTocEntries = []; DOM.topicInput.value = ""; DOM.styleInput.value = "";
+            generatedImages = []; globalTocEntries = []; DOM.topicInput.value = ""; DOM.styleInput.value = ""; DOM.customRecipeList.value = ""; DOM.visualSetting.value = "";
             DOM.aplusBannersContainer.innerHTML = ""; DOM.btnDownloadAPlus.classList.add('hidden');
             DOM.progressSection.classList.add('hidden');
             DOM.resetConfirmModal.classList.remove('show');
@@ -1036,29 +1090,71 @@ Output strictly JSON. Schema:
 
         function getCleanPageHtml(index) {
             const pages = document.querySelectorAll('.recipe-block[data-recipe-id="0"]');
-            if(!pages[index]) return '';
-            let clone = pages[index].cloneNode(true);
-            clone.style.width = '816px';
-            clone.style.height = '1056px';
-            clone.style.position = 'relative';
+            const width = getComputedStyle(document.documentElement).getPropertyValue('--page-width-px').trim();
+            const height = getComputedStyle(document.documentElement).getPropertyValue('--page-height-px').trim();
+            
+            let clone;
+            if(pages[index]) {
+                clone = pages[index].cloneNode(true);
+            } else {
+                clone = document.createElement('div');
+                clone.style.background = 'white';
+            }
+            
+            clone.style.width = width;
+            clone.style.height = height;
+            clone.style.position = 'absolute';
+            clone.style.top = '0';
+            clone.style.left = '0';
             clone.style.margin = '0';
             clone.style.boxShadow = 'none';
             clone.style.border = 'none';
+            
             clone.querySelectorAll('.editable-image-container').forEach(el => {
-                el.classList.remove('editable-image-container');
+                el.className = '';
                 el.onclick = null;
             });
-            return clone.outerHTML;
+            
+            return `<div style="width: ${width}; height: ${height}; overflow: hidden; position: relative;">${clone.outerHTML}</div>`;
         }
 
         function createFlatBookMockup(pageL, pageR) {
+            const width = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--page-width-px'));
+            const height = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--page-height-px'));
+            
+            // Dynamic scaling to guarantee fit within banner
+            const totalWidth = width * 2;
+            const scale = Math.min(360 / totalWidth, 240 / height);
+
             return `
-            <div class="aplus-mockup-wrapper" style="width: 400px; height: 260px; position: relative; display: flex; align-items: center; justify-content: center;">
-                <div class="aplus-mockup-scaler" style="position: absolute; transform: scale(0.24); display: flex;">
-                    <div class="aplus-flat-book" style="display: flex; box-shadow: 0 30px 60px rgba(0,0,0,0.4); border-radius: 4px; position: relative; background: white;">
-                        <div style="width: 816px; height: 1056px; overflow: hidden; position: relative;">${pageL}</div>
-                        <div style="width: 816px; height: 1056px; overflow: hidden; position: relative;">${pageR}</div>
-                        <div style="content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 80px; transform: translateX(-50%); background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0) 100%); pointer-events: none; z-index: 100;"></div>
+            <div class="aplus-mockup-wrapper" style="width: 400px; height: 280px; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; perspective: 1000px;">
+                <div class="aplus-mockup-scaler" style="position: absolute; transform: scale(${scale}); transform-origin: center center; display: flex;">
+                    
+                    <!-- Thick Page Stack Illusion -->
+                    <div style="position: absolute; bottom: -10px; left: 8px; right: 8px; height: 10px; background: #e2e8f0; border-radius: 0 0 6px 6px; border: 1px solid #cbd5e1; border-top: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3);"></div>
+                    
+                    <!-- Main Open Book Container -->
+                    <div class="aplus-flat-book" style="display: flex; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-radius: 4px; position: relative; background: white; overflow: hidden; border: 1px solid #cbd5e1;">
+                        
+                        <!-- Left Page -->
+                        <div style="width: ${width}px; height: ${height}px; overflow: hidden; position: relative; background: white;">
+                            ${pageL}
+                            <!-- Left Spine Curve Shadow -->
+                            <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(255,255,255,0) 80%, rgba(0,0,0,0.05) 92%, rgba(0,0,0,0.3) 100%); pointer-events: none; z-index: 100;"></div>
+                        </div>
+                        
+                        <!-- Center Spine Crease -->
+                        <div style="width: 4px; background: linear-gradient(to right, #64748b 0%, #1e293b 50%, #64748b 100%); z-index: 101;"></div>
+
+                        <!-- Right Page -->
+                        <div style="width: ${width}px; height: ${height}px; overflow: hidden; position: relative; background: white;">
+                            ${pageR}
+                            <!-- Right Spine Curve Shadow -->
+                            <div style="position: absolute; inset: 0; background: linear-gradient(to left, rgba(255,255,255,0) 80%, rgba(0,0,0,0.05) 92%, rgba(0,0,0,0.3) 100%); pointer-events: none; z-index: 100;"></div>
+                        </div>
+                        
+                        <!-- Top Soft Highlight -->
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.7); z-index: 102; pointer-events: none;"></div>
                     </div>
                 </div>
             </div>`;
@@ -1069,37 +1165,37 @@ Output strictly JSON. Schema:
             DOM.btnRegenerateAPlus.disabled = true; DOM.btnRegenAPlusText.classList.add('hidden'); DOM.btnRegenAPlusLoader.classList.remove('hidden');
             try {
                 const sys = `You are an Amazon KDP A+ Content marketing expert. Write persuasive, high-converting copy strictly in ${DOM.languageInput.value}. Output JSON: { "b1": { "headline": "...", "sub": "..." }, "b2": { "headline": "...", "bullets": ["...", "...", "..."] }, "b3": { "headline": "...", "sub": "..." } }`;
-                const copy = await callGemini(`Write A+ marketing copy for a cookbook about '${DOM.topicInput.value}' in ${DOM.languageInput.value}. Ensure translations are perfect.`, sys);
+                const promptData = DOM.topicInput.value || DOM.customRecipeList.value || "Cookbook";
+                const copy = await callGemini(`Write A+ marketing copy for a cookbook about '${promptData}' in ${DOM.languageInput.value}. Ensure translations are perfect.`, sys);
                 
                 DOM.aplusBannersContainer.innerHTML = `
-                    <div class="aplus-banner" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; display: flex; align-items: center; padding: 0 40px; justify-content: space-between;">
-                        <div style="flex: 1; padding-right: 30px;">
-                            <h2 contenteditable="true" class="editable-text" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #fbbf24; margin-bottom: 1rem; line-height: 1.1;">${copy.b1.headline}</h2>
-                            <p contenteditable="true" class="editable-text" style="font-family: 'Inter', sans-serif; font-size: 1.1rem; color: #cbd5e1; line-height: 1.6;">${copy.b1.sub}</p>
+                    <!-- Banner 1: Premium Dark -->
+                    <div class="aplus-banner" style="width: 970px; height: 300px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; display: flex; align-items: center; padding: 0 40px; justify-content: space-between; box-sizing: border-box; overflow: hidden; flex-shrink: 0;">
+                        <div style="flex: 1; padding-right: 30px; display: flex; flex-direction: column; justify-content: center; min-width: 0;">
+                            <h2 contenteditable="true" class="editable-text" style="font-family: 'Playfair Display', serif; font-size: 2.3rem; color: #fbbf24; margin: 0 0 1rem 0; line-height: 1.2;">${copy.b1.headline}</h2>
+                            <p contenteditable="true" class="editable-text" style="font-family: 'Inter', sans-serif; font-size: 1.1rem; color: #cbd5e1; margin: 0; line-height: 1.6;">${copy.b1.sub}</p>
                         </div>
-                        <div style="flex: 1; display: flex; justify-content: flex-end;">
-                            ${createFlatBookMockup(getCleanPageHtml(0), getCleanPageHtml(1))}
-                        </div>
+                        ${createFlatBookMockup(getCleanPageHtml(0), getCleanPageHtml(1))}
                     </div>
-                    <div class="aplus-banner" style="background: #ffffff; display: flex; align-items: center; padding: 0 40px; justify-content: space-between;">
-                        <div style="flex: 1; display: flex; justify-content: flex-start;">
-                            ${createFlatBookMockup(getCleanPageHtml(2), getCleanPageHtml(3))}
-                        </div>
-                        <div style="flex: 1; padding-left: 30px;">
-                            <h2 contenteditable="true" class="editable-text" style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #0f172a; margin-bottom: 1.5rem; line-height: 1.1;">${copy.b2.headline}</h2>
-                            <ul style="list-style: none; padding: 0; margin: 0;">
-                                ${copy.b2.bullets.map(b => `<li contenteditable="true" class="editable-text" style="margin-bottom: 1rem; display: flex; gap: 10px; font-size: 1.1rem; color: #334155;"><strong style="color: #10b981; font-size: 1.3rem;">✓</strong> ${b}</li>`).join('')}
+                    
+                    <!-- Banner 2: Light Features (Ingredients) -->
+                    <div class="aplus-banner" style="width: 970px; height: 300px; background: #ffffff; display: flex; align-items: center; padding: 0 40px; justify-content: space-between; box-sizing: border-box; overflow: hidden; flex-shrink: 0; border: 1px solid #e2e8f0;">
+                        ${createFlatBookMockup(getCleanPageHtml(2), getCleanPageHtml(3))}
+                        <div style="flex: 1; padding-left: 30px; display: flex; flex-direction: column; justify-content: center; min-width: 0;">
+                            <h2 contenteditable="true" class="editable-text" style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #0f172a; margin: 0 0 1.2rem 0; line-height: 1.2;">${copy.b2.headline}</h2>
+                            <ul style="list-style: none; padding: 0; margin: 0; font-family: 'Inter', sans-serif;">
+                                ${copy.b2.bullets.map(b => `<li contenteditable="true" class="editable-text" style="margin-bottom: 0.8rem; display: flex; gap: 12px; font-size: 1.05rem; color: #334155; align-items: flex-start;"><strong style="color: #10b981; font-size: 1.2rem; line-height: 1;">✓</strong> <span>${b}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
-                    <div class="aplus-banner" style="background: #f8fafc; display: flex; align-items: center; padding: 0 40px; justify-content: space-between;">
-                        <div style="flex: 1; padding-right: 30px;">
-                            <h2 contenteditable="true" class="editable-text" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #0f172a; margin-bottom: 1rem; line-height: 1.1;">${copy.b3.headline}</h2>
-                            <p contenteditable="true" class="editable-text" style="font-family: 'Inter', sans-serif; font-size: 1.1rem; color: #475569; line-height: 1.6;">${copy.b3.sub}</p>
+                    
+                    <!-- Banner 3: Slate Method (Steps) -->
+                    <div class="aplus-banner" style="width: 970px; height: 300px; background: #f8fafc; display: flex; align-items: center; padding: 0 40px; justify-content: space-between; box-sizing: border-box; overflow: hidden; flex-shrink: 0; border: 1px solid #e2e8f0;">
+                        <div style="flex: 1; padding-right: 30px; display: flex; flex-direction: column; justify-content: center; min-width: 0;">
+                            <h2 contenteditable="true" class="editable-text" style="font-family: 'Playfair Display', serif; font-size: 2.3rem; color: #0f172a; margin: 0 0 1rem 0; line-height: 1.2;">${copy.b3.headline}</h2>
+                            <p contenteditable="true" class="editable-text" style="font-family: 'Inter', sans-serif; font-size: 1.1rem; color: #475569; margin: 0; line-height: 1.6;">${copy.b3.sub}</p>
                         </div>
-                        <div style="flex: 1; display: flex; justify-content: flex-end;">
-                            ${createFlatBookMockup(getCleanPageHtml(4), getCleanPageHtml(5))}
-                        </div>
+                        ${createFlatBookMockup(getCleanPageHtml(4), getCleanPageHtml(5))}
                     </div>
                 `;
                 DOM.btnDownloadAPlus.classList.remove('hidden');
